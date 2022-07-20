@@ -1,0 +1,40 @@
+.backdrop-container{
+    border-radius: 20px; 
+    position: relative;
+
+}
+.posterImage{
+    border-radius: 20px;
+    position: absolute;
+    bottom: -180px;
+    left: 40px;
+    width: 200px;
+}
+.titleHeading{
+    margin-top: 10px;
+}
+.detailsContainer{
+    color: white;
+    margin-left: 260px;
+}
+.certificate{
+    border: 1px solid white;
+    border-radius: 2px;
+    padding: 2px 4px;
+    margin-right: 10px;
+}
+.starRating{
+    color: gold;
+}
+.fafa{
+    color: var(--menu);
+    margin: 0 10px;
+    display: inline-block;
+}
+.subTitle{
+    margin-bottom: 0 !important;
+}
+.taglineText{
+    color: #bebebe;
+
+}

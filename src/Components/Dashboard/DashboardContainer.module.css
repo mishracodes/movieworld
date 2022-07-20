@@ -1,0 +1,13 @@
+.dashboard {
+    border-radius: 20px;
+    flex: 25;
+    margin-left: 4.4em;
+    padding: 0 1em;
+    min-height: 90vh;
+    overflow-x: hidden;
+    margin-top: 3.4em;
+  } 
+.cards { 
+  background: linear-gradient(to right bottom, #1f1437f1, #1f1437a9);
+  border-radius: 20px;
+}

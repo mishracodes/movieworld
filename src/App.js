@@ -1,25 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter, Routes, Route} from "react-router-dom";
+import Dashboard from "./Components/Dashboard/Dashboard";
+import Header from "./Components/Header";
+import MTDetails from "./Components/MovieTVDetails/MTDetails";
+import Navbar from "./Components/Navbar";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  <BrowserRouter>
+    <main>
+      <div className="content">
+      <Header/>
+        <Navbar />
+        <Routes>
+          <Route index element={<Dashboard />} />
+          <Route path="movie/:id" element={<MTDetails />} />
+          <Route path="tv/:id" element={<MTDetails />} />
+        </Routes>
+      </div>
+    </main>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;

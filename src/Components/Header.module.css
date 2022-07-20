@@ -1,0 +1,8 @@
+.header{
+    background: #503a8031;
+    border-radius: 20px;
+    padding: 10px;
+    height: 5vh;
+    width: 95vw;
+    position: fixed;
+  }

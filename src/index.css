@@ -1,13 +1,83 @@
-body {
+@import url("https://fonts.googleapis.com/css2?family=Radio+Canada:wght@400;500;600;700&display=swap");
+:root {
+  --background: #140c28;
+  --foreground: #1f1437;
+  --menu: #777779;
+  --text: #ffffff;
+  --warning: #ffde1f;
+  --danger: #dc3545;
+  --dark: #202040;
+}
+* {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Radio Canada", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+  scroll-behavior: smooth;
+}
+::-moz-selection {
+  /* Code for Firefox */
+  color: var(--dark);
+  background: var(--warning);
+}
+::selection {
+  color: var(--dark);
+  background: var(--warning);
+}
+::-webkit-scrollbar {
+  height: 8px;              /* height of horizontal scrollbar ← You're missing this */
+  width: 0;               /* width of vertical scrollbar */
+  border: 1px solid #d5d5d5;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  border-radius: 50px;
+
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+  border-radius: 50px;
+
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+  
+}
+body {
+  background-image: linear-gradient(to left, #140c2823, #140c28f6),
+    url(https://initiate.alphacoders.com/images/118/cropped-1920-1080-1187622.jpg?3363);
+  background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+main {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.content {
+  height: 95vh;
+  width: 95vw;
+  display: flex;
+}
+
+
+.scrollmenu{
+  overflow: auto;
+  white-space: nowrap;
+}
+.scrollmenua{
+  display: inline-block;
+}
+

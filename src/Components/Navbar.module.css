@@ -1,0 +1,36 @@
+.side-navbar {
+    flex: 1;
+    background: #503a8031;
+    margin-right: 50px;
+    border-radius: 20px;
+    padding: 10px;
+    margin-top: 3.4em;
+    text-align: center;
+    height: 90vh;
+    width: 4.4em;
+    position: fixed;
+  }
+  .nav-list {
+    list-style: none;
+    font-size: 14px;
+    padding: 0 !important;
+  }
+  .fafa {
+    margin: 30px 0 5px 0;
+  }
+  .active{
+    color: var(--text);
+  }
+  .fafa-footer{
+    position: absolute;
+    margin: auto;
+    bottom: 20px;
+  }
+  a {
+    text-decoration: none !important ;
+    color: var(--menu);
+  }
+  a:hover{
+    text-decoration: none !important ;
+    color: var(--text);
+  }
