@@ -1,3 +1,6 @@
+.mainContainer{
+    color: white;
+}
 .backdrop-container{
     border-radius: 20px; 
     position: relative;
@@ -14,7 +17,7 @@
     margin-top: 10px;
 }
 .detailsContainer{
-    color: white;
+ 
     margin-left: 260px;
 }
 .certificate{
@@ -37,4 +40,7 @@
 .taglineText{
     color: #bebebe;
 
+}
+.baseConatiner{
+    margin-left: 40px;
 }

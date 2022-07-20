@@ -48,9 +48,13 @@
   background: #555; 
   
 }
+::placeholder {
+  color: #b6b6b8;
+  opacity: 1; /* Firefox */
+}
 body {
-  background-image: linear-gradient(to left, #140c2823, #140c28f6),
-    url(https://initiate.alphacoders.com/images/118/cropped-1920-1080-1187622.jpg?3363);
+  background-image: linear-gradient(to left, #140c28be, #140c28f3),
+    url(https://external-preview.redd.it/3tG5HwXFs5U7pC7BZmtLfAibv1ZCVLZL_qQfQZSIWd4.jpg?auto=webp&s=8c9e7d76f208b25edeaa1af4a9c78d2aa55515e2);
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
