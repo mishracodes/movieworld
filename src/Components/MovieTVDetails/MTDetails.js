@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import DashboardContainer from '../Dashboard/DashboardContainer';
 import CastItem from './CastItem';
 import classes from './MTDetails.module.css'
+import RecommendationItem from './RecommendationItem';
 
 
 
@@ -11,6 +12,9 @@ const MTDetails = () => {
     const [result, setresult] = useState(null);
     const [cast, setcast] = useState([]);
     const [crew, setcrew] = useState([]);
+    const [reviews, setreviews] = useState(null)
+    const [recommendation, setrecommendation] = useState([]);
+
 
     const getMovieDetails = async () => {
       let url = `https://api.themoviedb.org/3/movie/${id}?api_key=c725cd6e0711c581df4c197979bb6a39&language=en-US`;
@@ -22,16 +26,32 @@ const MTDetails = () => {
       let data = await fetch(url);
       let parsedData = await data.json();
   
-      setcast(cast.concat(parsedData.cast));
-      setcrew(crew.concat(parsedData.crew));
+      setcast(parsedData.cast);
+      setcrew(parsedData.crew);
     };
+
+    const getReviews = async () => {
+      let url = `https://api.themoviedb.org/3/movie/${id}/reviews?api_key=c725cd6e0711c581df4c197979bb6a39&language=en-US&page=1`;
+      let data = await fetch(url);
+      let parsedData = await data.json();
+      setreviews(parsedData.results[0]);
+    };
+    const getRecommenddation = async () => {
+      let url = `https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=c725cd6e0711c581df4c197979bb6a39&language=en-US&page=1`;
+      let data = await fetch(url);
+      let parsedData = await data.json();
+      setrecommendation(parsedData.results);
+    };
+
     useEffect(() => {
       getMovieDetails().then((res) => {
         setresult(res);
       });
       getCastCrew();
+      getReviews();
+      getRecommenddation();
       // eslint-disable-next-line
-    }, []);
+    }, [id]);
     function timeConvert(n) {
       var num = n;
       var hours = num / 60;
@@ -72,7 +92,7 @@ const MTDetails = () => {
                     })
                     .map((e) => {
                       return (
-                        <div key={e.name+e.job} className="col-md-4">
+                        <div key={e.name+Math.random()} className="col-md-4">
                           <p style={{ margin: "0" }} className="h5">
                             
                             <strong>{e.name}</strong>
@@ -80,7 +100,7 @@ const MTDetails = () => {
                           <p>{e.job}</p>
                         </div>
                       );
-                    })}
+                    })} 
                 </div>
         </div>
         <div className={classes.baseConatiner}>
@@ -102,14 +122,68 @@ const MTDetails = () => {
                   </div>
                 );
               })}
-              View More <i className="fa-solid fa-arrow-right-long"></i>
+              <Link to="/" className="text-decoration-none my-2">View More <i className="fa-solid fa-arrow-right-long"></i></Link>
 
-            <div className="my-2">
-              <Link to="/" className="text-decoration-none">
-                <p style={{ fontWeight: "600" }}>Full Cast & Crew</p>
-              </Link>
+              <hr/>
+              <div>
+              <h5 style={{ fontWeight: "600" }}>People also liked</h5>
+              <div className="scrollmenu">
+                {recommendation.map((e) => {
+                  return (
+                    <div
+                      
+                      className="scrollmenua mx-2"
+                      style={{ width: "20.499999995%" }}
+                      key={e.id}
+                    >
+                      <RecommendationItem
+                        id={e.id}
+                        title={e.original_title}
+                        image={e.backdrop_path}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-
+              
+              <hr/>
+              <p>Reviews</p>
+              
+                        {reviews&&<div className="d-flex">
+                          <div className="flex-shrink-0">
+                            <img
+                              src={`https://image.tmdb.org/t/p/w64_and_h64_face${reviews.author_details.avatar_path}`}
+                              className="card-img-top"
+                              alt="..."
+                              style={{ borderRadius: "50%", width: '44px' }}
+                            />
+                          </div>
+                          <div className="flex-grow-1 ms-3">
+                            <h5 className="card-title">
+                              A Review by {reviews.author}
+                              <div
+                                style={{ padding: "2px 5px" }}
+                                disabled
+                                className="btn btn-dark btn-sm mx-2 my2"
+                              >
+                                
+                                <i className="fa-solid fa-star mx-1 text-warning"></i>
+                                {reviews.author_details.rating}
+                              </div>
+                            </h5>
+                            <p>
+                              Written by <strong>{reviews.author}</strong> on
+                              {new Date(reviews.created_at).toString()}
+                            </p>
+                            <p className="card-text">
+                              {reviews.content.slice(0, 600)}
+                            </p>
+                          </div>
+                        </div>}
+                        <Link to="/" className="text-decoration-none">
+                <p style={{ fontWeight: "600" }} className='my-3'>Read all reviews</p>
+              </Link>
             
         </div>
       </div>}
