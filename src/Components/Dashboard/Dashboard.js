@@ -11,19 +11,19 @@ const Dashboard = () => {
       <Crousal/>
         <div className={classes.card}>
           <p>Popular</p>
-          <ListContainer />
+          <ListContainer type="tv" />
         </div>
         <div className={classes.card}>
           <p>Popular</p>
-          <ListContainer />
+          <ListContainer type="movie"  />
         </div>
         <div className={classes.card}>
           <p>Popular</p>
-          <ListContainer />
+          <ListContainer type="movie"  />
         </div>
         <div className={classes.card}>
           <p>Popular</p>
-          <ListContainer />
+          <ListContainer type="movie"  />
         </div>
         
       </div>

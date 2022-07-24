@@ -44,3 +44,8 @@
 .baseConatiner{
     margin-left: 40px;
 }
+.belongsToCollection{
+    border-radius: 10px;
+padding-top: 7%;    
+padding-left: 40px;
+}

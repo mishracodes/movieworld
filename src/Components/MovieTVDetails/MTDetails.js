@@ -4,25 +4,27 @@ import DashboardContainer from '../Dashboard/DashboardContainer';
 import CastItem from './CastItem';
 import classes from './MTDetails.module.css'
 import RecommendationItem from './RecommendationItem';
+import Sidebar from './Sidebar';
 
 
 
 const MTDetails = () => {
-    const { id } = useParams();
+    const { id, type } = useParams();
     const [result, setresult] = useState(null);
     const [cast, setcast] = useState([]);
     const [crew, setcrew] = useState([]);
     const [reviews, setreviews] = useState(null)
     const [recommendation, setrecommendation] = useState([]);
+    const [social, setsocial] = useState({});
 
 
     const getMovieDetails = async () => {
-      let url = `https://api.themoviedb.org/3/movie/${id}?api_key=c725cd6e0711c581df4c197979bb6a39&language=en-US`;
+      let url = `https://api.themoviedb.org/3/${type}/${id}?api_key=c725cd6e0711c581df4c197979bb6a39&language=en-US`;
       let data = await fetch(url);
       return data.json();
     };
     const getCastCrew = async () => {
-      let url = `https://api.themoviedb.org/3/movie/${id}/credits?api_key=c725cd6e0711c581df4c197979bb6a39&language=en-US`;
+      let url = `https://api.themoviedb.org/3/${type}/${id}/credits?api_key=c725cd6e0711c581df4c197979bb6a39&language=en-US`;
       let data = await fetch(url);
       let parsedData = await data.json();
   
@@ -31,16 +33,22 @@ const MTDetails = () => {
     };
 
     const getReviews = async () => {
-      let url = `https://api.themoviedb.org/3/movie/${id}/reviews?api_key=c725cd6e0711c581df4c197979bb6a39&language=en-US&page=1`;
+      let url = `https://api.themoviedb.org/3/${type}/${id}/reviews?api_key=c725cd6e0711c581df4c197979bb6a39&language=en-US&page=1`;
       let data = await fetch(url);
       let parsedData = await data.json();
       setreviews(parsedData.results[0]);
     };
     const getRecommenddation = async () => {
-      let url = `https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=c725cd6e0711c581df4c197979bb6a39&language=en-US&page=1`;
+      let url = `https://api.themoviedb.org/3/${type}/${id}/recommendations?api_key=c725cd6e0711c581df4c197979bb6a39&language=en-US&page=1`;
       let data = await fetch(url);
       let parsedData = await data.json();
       setrecommendation(parsedData.results);
+    };
+    const getSocial = async () => {
+      let url = `https://api.themoviedb.org/3/movie/${id}/external_ids?api_key=c725cd6e0711c581df4c197979bb6a39`;
+      let data = await fetch(url);
+      let parsedData = await data.json();
+      setsocial(parsedData);
     };
 
     useEffect(() => {
@@ -50,6 +58,7 @@ const MTDetails = () => {
       getCastCrew();
       getReviews();
       getRecommenddation();
+      getSocial();
       // eslint-disable-next-line
     }, [id]);
     function timeConvert(n) {
@@ -60,6 +69,10 @@ const MTDetails = () => {
       var rminutes = Math.round(minutes);
       return rhours + " h " + rminutes + " m";
     }
+    var formatter = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    });
 
   return (
     <DashboardContainer>
@@ -125,30 +138,34 @@ const MTDetails = () => {
               <Link to="/" className="text-decoration-none my-2">View More <i className="fa-solid fa-arrow-right-long"></i></Link>
 
               <hr/>
-              <div>
-              <h5 style={{ fontWeight: "600" }}>People also liked</h5>
-              <div className="scrollmenu">
-                {recommendation.map((e) => {
-                  return (
-                    <div
-                      
-                      className="scrollmenua mx-2"
-                      style={{ width: "20.499999995%" }}
-                      key={e.id}
-                    >
-                      <RecommendationItem
-                        id={e.id}
-                        title={e.original_title}
-                        image={e.backdrop_path}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+
+              <div className={`row`}> 
+                <div className={`col-md-9`}>
+
+               
+                  <h5 style={{ fontWeight: "600" }}>People also liked</h5>
+                  <div className="scrollmenu">
+                    {recommendation.map((e) => {
+                      return (
+                        <div
+                          
+                          className="scrollmenua mx-2"
+                          style={{ width: "25.499999995%" }}
+                          key={e.id}
+                        >
+                          <RecommendationItem
+                            id={e.id}
+                            title={e.original_title}
+                            image={e.backdrop_path}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+            
               
               <hr/>
-              <p>Reviews</p>
+                    <p>Reviews</p>
               
                         {reviews&&<div className="d-flex">
                           <div className="flex-shrink-0">
@@ -182,8 +199,90 @@ const MTDetails = () => {
                           </div>
                         </div>}
                         <Link to="/" className="text-decoration-none">
-                <p style={{ fontWeight: "600" }} className='my-3'>Read all reviews</p>
-              </Link>
+                          <p style={{ fontWeight: "600" }} className='my-3'>Read all reviews</p>
+                        </Link>
+
+                        <hr/>
+                        <h5>Details</h5>
+                        
+                        <p style={{ margin: "0" }}>
+                          <strong>Status</strong> <span className='text-secondary'>{result.status}</span>
+                        </p>
+                        <p style={{ margin: "0" }}>
+                          <strong>Original Language</strong> <span className='text-secondary'>{result.original_language.toUpperCase()}</span>
+                        </p>
+                        <p style={{ margin: "0" }}>
+                          <strong>Budget</strong> <span className='text-secondary'>{formatter.format(result.budget)}</span>
+                        </p>
+                        <p style={{ margin: "0" }}>
+                          <strong>Revenue</strong> <span className='text-secondary'>{formatter.format(result.revenue)}</span>
+                        </p>
+
+                        <p style={{ margin: "0" }}>
+                          <strong>Adult</strong> <span className='text-secondary'>{result.adult?"Yes":"No"}</span>
+                        </p>
+
+                        <p style={{ margin: "0" }}>
+                          <strong>Hompage</strong> <a href={result.homepage} target="_blank" rel="noreferrer" ><span className='text-secondary'>Click here to visit</span></a>
+                        </p>
+
+                        <p style={{ margin: "0" }}>
+                          <strong>Visit IMDb</strong> <a href={`https://www.imdb.com/title/${result.imdb_id}`} target="_blank" rel="noreferrer" ><span className='text-secondary'>Click here to visit</span></a>
+                        </p>
+                        
+                        <p style={{ margin: "0" }}>
+                          <strong>Visit </strong> <span className='text-secondary'>{result.revenue}</span>
+                        </p>
+                        <p style={{ margin: "0" }}>
+                          <strong>Visit </strong> <span className='text-secondary'>{result.revenue}</span>
+                        </p>
+                        <p style={{ margin: "0" }}>
+                          <strong>Visit </strong> <span className='text-secondary'>{result.revenue}</span>
+                        </p>
+                        <hr/>
+
+                        <div className={classes.belongsToCollection} style={{backgroundImage: ` linear-gradient(to right, #032541cc 150px, #898989ee 100%),url( 'https://image.tmdb.org/t/p/w1440_and_h320_multi_faces${result.belongs_to_collection.backdrop_path}')`,height: "280px",}}>
+                        <h2>Part of the {result.belongs_to_collection.name}</h2>
+                        <button type="button" class="btn btn-warning text-white">VIEW THE COLLECTION</button>
+
+                        </div>
+
+                </div>
+
+                <div className='col-md-3'>
+                <div className="fs-2 px-4">
+                          
+                          <a
+                            href={`https://www.imdb.com/title/${social.imdb_id}`}
+                            target="_blank" rel="noreferrer"
+                          >
+                            <i className="iconhover fa-brands fa-imdb mx-1"></i>
+                          </a>
+                          <a
+                            href={`https://www.facebook.com/${social.facebook_id}`}
+                            target="_blank" rel="noreferrer"
+                          >
+                            <i className="iconhover fa-brands fa-facebook mx-1"></i>
+                          </a>
+                          <a
+                            href={`https://www.instagram.com/${social.instagram_id}`}
+                            target="_blank" rel="noreferrer"
+                          >
+                            <i className="iconhover fa-brands fa-instagram mx-1"></i>
+                          </a>
+                          <a
+                            href={`https://twitter.com/${social.twitter_id}`}
+                            target="_blank" rel="noreferrer"
+                          >
+                            <i className="iconhover fa-brands fa-twitter mx-1"></i>
+                          </a>
+                        </div>
+                  <Sidebar id={id}/>
+
+                </div>
+
+             
+              </div>
             
         </div>
       </div>}
