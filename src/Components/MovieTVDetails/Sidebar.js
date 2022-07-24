@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react'
 import classes from './Sidebar.module.css'
 
 const Sidebar = (props) => {
-    const {id}=props;
+    const {id, type}=props;
     const [images, setimages] = useState(null)
     const [videos, setvideos] = useState(null)
     const getImages = async () => {
-        let url = `https://api.themoviedb.org/3/movie/${id}/images?api_key=c725cd6e0711c581df4c197979bb6a39`;
+        let url = `https://api.themoviedb.org/3/${type}/${id}/images?api_key=c725cd6e0711c581df4c197979bb6a39`;
         let data = await fetch(url);
         let parsedData = await data.json();
         setimages(parsedData);
       };
       const getVideos = async () => {
-        let url = `https://api.themoviedb.org/3/movie/${id}/videos?api_key=c725cd6e0711c581df4c197979bb6a39`;
+        let url = `https://api.themoviedb.org/3/${type}/${id}/videos?api_key=c725cd6e0711c581df4c197979bb6a39`;
         let data = await fetch(url);
         let parsedData = await data.json();
         setvideos(parsedData);

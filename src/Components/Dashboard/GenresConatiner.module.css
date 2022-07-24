@@ -1,0 +1,8 @@
+.scrollItemContainer {
+    overflow: auto;
+    white-space: nowrap;
+  }
+  .scrollItems {
+    display: inline-block;
+  }
+  

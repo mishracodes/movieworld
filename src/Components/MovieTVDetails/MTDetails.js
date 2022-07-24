@@ -18,7 +18,7 @@ const MTDetails = () => {
     const [social, setsocial] = useState({});
 
 
-    const getMovieDetails = async () => {
+    const getDetails = async () => {
       let url = `https://api.themoviedb.org/3/${type}/${id}?api_key=c725cd6e0711c581df4c197979bb6a39&language=en-US`;
       let data = await fetch(url);
       return data.json();
@@ -52,7 +52,7 @@ const MTDetails = () => {
     };
 
     useEffect(() => {
-      getMovieDetails().then((res) => {
+      getDetails().then((res) => {
         setresult(res);
       });
       getCastCrew();
@@ -81,11 +81,11 @@ const MTDetails = () => {
             <img className={classes.posterImage} src={`https://image.tmdb.org/t/p/w300_and_h450_bestv2${result.poster_path}`} alt="..."/>
         </div>
         <div className={classes.detailsContainer}>
-          <h2 className={classes.titleHeading}>{result.original_title} ({result.release_date.split("-")[0]})</h2>
+          <h2 className={classes.titleHeading}>{type==='movie'?result.original_title:result.original_name} ({type==='movie'?result.release_date.split("-")[0]:result.first_air_date.split("-")[0] })</h2>
           <p className={classes.subTitle}> <span className={classes.certificate}>PG-12 </span> 
-            {result.genres.map((e) => {return (
-              <span key={e.name}>{e.name + " "}</span>
-            );})} • {timeConvert(result.runtime)}
+            {result.genres.map((e,index) => {return (
+              <span key={e.name}>{index!==0 && <span>,</span>} {e.name + " "}</span>
+            );})} • {timeConvert(type==='movie'?result.runtime: result.episode_run_time)}
           </p>
           <p><span className={classes.starRating}>&#9733; &#9733; &#9733; &#9733; &#9733;</span> {result.vote_average}/10 ( {result.vote_count} votes )
               <span className={classes.fafa}><i className="fa-solid fa-bookmark"></i></span>
@@ -95,12 +95,13 @@ const MTDetails = () => {
               <p>{result.overview}</p>
                 <div className="row">
                   
-                  {crew
+                  {crew&&crew
                     .filter((e) => {
                       return (
                         e.job === "Writer" ||
                         e.job === "Director" ||
-                        e.job === "Story"
+                        e.job === "Story"||
+                        e.job === "Creator"
                       );
                     })
                     .map((e) => {
@@ -119,7 +120,7 @@ const MTDetails = () => {
         <div className={classes.baseConatiner}>
           <p>Stars</p>
               
-              {cast.slice(0, 7).map((e) => {
+              {cast&&cast.slice(0, 7).map((e) => {
                 return (
                   <div
                     style={{ width: "12%" }}
@@ -145,7 +146,7 @@ const MTDetails = () => {
                
                   <h5 style={{ fontWeight: "600" }}>People also liked</h5>
                   <div className="scrollmenu">
-                    {recommendation.map((e) => {
+                    {recommendation&&recommendation.map((e) => {
                       return (
                         <div
                           
@@ -211,12 +212,12 @@ const MTDetails = () => {
                         <p style={{ margin: "0" }}>
                           <strong>Original Language</strong> <span className='text-secondary'>{result.original_language.toUpperCase()}</span>
                         </p>
-                        <p style={{ margin: "0" }}>
+                        {result.budget&&<p style={{ margin: "0" }}>
                           <strong>Budget</strong> <span className='text-secondary'>{formatter.format(result.budget)}</span>
-                        </p>
-                        <p style={{ margin: "0" }}>
+                        </p>}
+                        {result.revenue&&<p style={{ margin: "0" }}>
                           <strong>Revenue</strong> <span className='text-secondary'>{formatter.format(result.revenue)}</span>
-                        </p>
+                        </p>}
 
                         <p style={{ margin: "0" }}>
                           <strong>Adult</strong> <span className='text-secondary'>{result.adult?"Yes":"No"}</span>
@@ -226,26 +227,33 @@ const MTDetails = () => {
                           <strong>Hompage</strong> <a href={result.homepage} target="_blank" rel="noreferrer" ><span className='text-secondary'>Click here to visit</span></a>
                         </p>
 
-                        <p style={{ margin: "0" }}>
+                        {result.imdb_id&&<p style={{ margin: "0" }}>
                           <strong>Visit IMDb</strong> <a href={`https://www.imdb.com/title/${result.imdb_id}`} target="_blank" rel="noreferrer" ><span className='text-secondary'>Click here to visit</span></a>
-                        </p>
+                        </p>}
                         
                         <p style={{ margin: "0" }}>
-                          <strong>Visit </strong> <span className='text-secondary'>{result.revenue}</span>
+                          <strong>Production Companies </strong> 
+                          {result.production_companies.map((e,index)=>{return <span className='text-secondary'>{index!==0 && <span>&#9679;</span>}  {e.name} </span>})}
+                        </p>
+                        <p style={{ margin: "0" }}>
+                          <strong>Producation Countries </strong> {result.production_countries.map((e,index)=>{return <span className='text-secondary'> {index!==0 && <span>&#9679;</span>}  {e.iso_3166_1}  <img src={`https://flagcdn.com/24x18/${e.iso_3166_1.toLowerCase()}.png`} alt="country flag"/></span>})}
+                        </p>
+                        <p style={{ margin: "0" }}>
+                          <strong>Release Date </strong> <span className='text-secondary'>{new Date(type==='movie'?result.release_date:result.first_air_date).toDateString()}</span>
+                        </p>
+                        {/* <p style={{ margin: "0" }}>
+                          <strong>Spoken Languages </strong> <span className='text-secondary'>{result.revenue}</span>
                         </p>
                         <p style={{ margin: "0" }}>
                           <strong>Visit </strong> <span className='text-secondary'>{result.revenue}</span>
-                        </p>
-                        <p style={{ margin: "0" }}>
-                          <strong>Visit </strong> <span className='text-secondary'>{result.revenue}</span>
-                        </p>
+                        </p> */}
                         <hr/>
 
-                        <div className={classes.belongsToCollection} style={{backgroundImage: ` linear-gradient(to right, #032541cc 150px, #898989ee 100%),url( 'https://image.tmdb.org/t/p/w1440_and_h320_multi_faces${result.belongs_to_collection.backdrop_path}')`,height: "280px",}}>
+                        {result.belongs_to_collection&&<div className={classes.belongsToCollection} style={{backgroundImage: ` linear-gradient(to right, #032541cc 150px, #898989ee 100%),url( 'https://image.tmdb.org/t/p/w1440_and_h320_multi_faces${result.belongs_to_collection.backdrop_path}')`,height: "280px",}}>
                         <h2>Part of the {result.belongs_to_collection.name}</h2>
                         <button type="button" class="btn btn-warning text-white">VIEW THE COLLECTION</button>
 
-                        </div>
+                        </div>}
 
                 </div>
 
@@ -277,7 +285,7 @@ const MTDetails = () => {
                             <i className="iconhover fa-brands fa-twitter mx-1"></i>
                           </a>
                         </div>
-                  <Sidebar id={id}/>
+                  <Sidebar id={id} type={type}/>
 
                 </div>
 
